@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Music Rating</title>
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <meta name="theme-color" content="#7c5cff" />
 </head>
 <body data-theme="dark">
 
@@ -47,7 +52,7 @@
 
       <label class="field">
         <span>Название</span>
-        <input type="text" id="inp-title" placeholder="например, один">
+        <input type="text" id="inp-title" placeholder="например, дым">
       </label>
 
       <div class="slider-group">
@@ -152,5 +157,16 @@
   <script src="js/matches.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/main.js"></script>
+
+  <!-- PWA: регистрация Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => {
+          console.warn('SW не зарегистрирован:', err);
+        });
+      });
+    }
+  </script>
 </body>
 </html>
