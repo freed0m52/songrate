@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Rating</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="dark">
+
+  <!-- Верхняя панель -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button id="btn-home" class="btn-icon hidden" title="Главная">🏠</button>
+      <h1 id="app-title">Мои треки</h1>
+    </div>
+    <div class="topbar-right">
+      <button id="btn-add"    class="btn-icon" title="Добавить песню">➕</button>
+      <button id="btn-upload" class="btn-icon" title="Загрузить JSON">📂</button>
+      <button id="btn-friends" class="btn-icon" title="Друзья">👥</button>
+      <button id="btn-matches" class="btn-icon" title="Мэтчи">💞</button>
+      <button id="btn-theme"   class="btn-icon" title="Настройки">⚙️</button>
+    </div>
+  </header>
+
+  <!-- Основной контент -->
+  <main id="content" class="content">
+    <div id="song-list" class="song-list"></div>
+  </main>
+
+  <!-- Кнопка сохранения (плавающая) -->
+  <button id="btn-save-json" class="btn-fab hidden" title="Сохранить в JSON">💾</button>
+
+  <!-- Скрытые input'ы -->
+  <input type="file" id="file-input" accept="application/json" hidden>
+  <input type="file" id="friend-file-input" accept="application/json" hidden>
+
+  <!-- Модалка добавления/редактирования песни -->
+  <div id="modal-song" class="modal hidden">
+    <div class="modal-content">
+      <h2 id="song-modal-title">Новая песня</h2>
+
+      <label class="field">
+        <span>Исполнитель</span>
+        <input type="text" id="inp-artist" placeholder="aikko">
+      </label>
+
+      <label class="field">
+        <span>Название</span>
+        <input type="text" id="inp-title" placeholder="например, дым">
+      </label>
+
+      <div class="slider-group">
+        <label class="slider-row">
+          <span>Музыка: <b id="val-music">5</b></span>
+          <input type="range" id="inp-music" min="0" max="10" step="1" value="5">
+        </label>
+
+        <label class="slider-row">
+          <span>Текст: <b id="val-text">5</b></span>
+          <input type="range" id="inp-text" min="0" max="10" step="1" value="5">
+        </label>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="inp-no-text">
+          <span>Нет текста</span>
+        </label>
+
+        <label class="slider-row">
+          <span>Атмосфера / вайб: <b id="val-vibe">10</b></span>
+          <input type="range" id="inp-vibe" min="0" max="20" step="1" value="10">
+        </label>
+      </div>
+
+      <div class="tags-group">
+        <label class="checkbox-row"><input type="checkbox" data-tag="concert"><span>Концертник</span></label>
+        <label class="checkbox-row"><input type="checkbox" data-tag="live"><span>Хочется жить</span></label>
+        <label class="checkbox-row"><input type="checkbox" data-tag="die"><span>Хочется умереть</span></label>
+        <label class="checkbox-row"><input type="checkbox" data-tag="best"><span>Лучший трек</span></label>
+        <label class="checkbox-row"><input type="checkbox" data-tag="favorite"><span>Любимый трек</span></label>
+      </div>
+
+      <div class="modal-actions">
+        <button id="btn-cancel-song" class="btn-secondary">Отмена</button>
+        <button id="btn-save-song" class="btn-primary">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модалка друзей -->
+  <div id="modal-friends" class="modal hidden">
+    <div class="modal-content">
+      <h2>Друзья</h2>
+
+      <div id="friend-list" class="friend-list"></div>
+
+      <div class="friend-add">
+        <input type="text" id="inp-friend-name" placeholder="Имя друга">
+        <button id="btn-add-friend" class="btn-primary">Добавить</button>
+      </div>
+
+      <div class="modal-actions">
+        <button id="btn-close-friends" class="btn-secondary">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модалка выбора друга для мэтчей -->
+  <div id="modal-match-picker" class="modal hidden">
+    <div class="modal-content">
+      <h2>Мэтчи</h2>
+      <label class="field">
+        <span>Выбери друга</span>
+        <select id="match-friend-select"></select>
+      </label>
+      <div class="modal-actions">
+        <button id="btn-close-match-picker" class="btn-secondary">Отмена</button>
+        <button id="btn-compare" class="btn-primary">Сравнить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модалка результата мэтчей -->
+  <div id="modal-matches-result" class="modal hidden">
+    <div class="modal-content modal-wide">
+      <h2 id="matches-title">Результат сравнения</h2>
+      <div id="matches-result" class="matches-result"></div>
+      <div class="modal-actions">
+        <button id="btn-back-to-picker" class="btn-secondary">Назад</button>
+        <button id="btn-close-matches" class="btn-secondary">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модалка темы -->
+  <div id="modal-theme" class="modal hidden">
+    <div class="modal-content">
+      <h2>Настройки</h2>
+      <p>Цветовая тема:</p>
+      <div id="theme-picker" class="theme-picker"></div>
+      <div class="modal-actions">
+        <button id="btn-close-theme" class="btn-secondary">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/songs.js"></script>
+  <script src="js/friends.js"></script>
+  <script src="js/matches.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+/* ===== Темы через CSS-переменные ===== */
+:root {
+  --bg: #111;
+  --panel: #1c1c1c;
+  --panel-2: #262626;
+  --text: #eee;
+  --text-dim: #aaa;
+  --accent: #7c5cff;
+  --accent-2: #a48bff;
+  --gold: #ffcf40;
+  --gold-2: #ffe89a;
+  --border: #333;
+  --shadow: rgba(0,0,0,.5);
+}
+
+[data-theme="dark"]  { /* значения по умолчанию из :root */ }
+[data-theme="light"] {
+  --bg:#f4f4f8; --panel:#fff; --panel-2:#f0f0f5; --text:#111;
+  --text-dim:#666; --border:#ddd; --shadow: rgba(0,0,0,.1);
+}
+[data-theme="neon"] {
+  --bg:#0a0014; --panel:#14002b; --panel-2:#1e0040; --text:#f0e7ff;
+  --text-dim:#b39ddb; --accent:#ff2fd0; --accent-2:#00e5ff;
+  --border:#3a0066; --shadow: rgba(255,0,200,.25);
+}
+[data-theme="sunset"] {
+  --bg:#1a0d0d; --panel:#2a1414; --panel-2:#3a1c1c; --text:#ffe9d6;
+  --text-dim:#c9a08a; --accent:#ff7b54; --accent-2:#ffb26b;
+  --border:#4a2424; --shadow: rgba(255,120,80,.25);
+}
+[data-theme="ocean"] {
+  --bg:#04121f; --panel:#0a2236; --panel-2:#0f2e48; --text:#dbf1ff;
+  --text-dim:#82b4d6; --accent:#28c8ff; --accent-2:#66e6c8;
+  --border:#123a5a; --shadow: rgba(40,200,255,.25);
+}
+[data-theme="forest"] {
+  --bg:#0b1a12; --panel:#12261b; --panel-2:#183323; --text:#e3f5e7;
+  --text-dim:#8fc79f; --accent:#4ade80; --accent-2:#a3e635;
+  --border:#1e3d2a; --shadow: rgba(74,222,128,.2);
+}
+
+/* ===== База ===== */
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; height:100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  transition: background .25s, color .25s;
+  padding-bottom: 90px;
+}
+
+/* ===== Topbar ===== */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 12px var(--shadow);
+}
+.topbar-left { display: flex; align-items: center; gap: 10px; }
+.topbar h1 { font-size: 18px; margin: 0; }
+.topbar-right { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.btn-icon {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform .12s, background .2s;
+}
+.btn-icon:hover { background: var(--accent); color: #fff; transform: scale(1.06); }
+.hidden { display: none !important; }
+
+/* ===== Контент ===== */
+.content { padding: 14px; max-width: 900px; margin: 0 auto; }
+.song-list { display: flex; flex-direction: column; gap: 10px; }
+
+.song-card {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 10px var(--shadow);
+  transition: transform .15s;
+}
+.song-card:hover { transform: translateY(-2px); }
+
+.song-card.gold {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, var(--panel), var(--panel-2));
+  box-shadow: 0 0 18px var(--gold);
+}
+
+.song-info { flex: 1; min-width: 0; }
+.song-title {
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-wrap: anywhere;
+}
+.song-artist { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
+
+.song-score {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent-2);
+  white-space: nowrap;
+}
+.song-card.gold .song-score { color: var(--gold); text-shadow: 0 0 8px var(--gold); }
+
+.song-actions { display: flex; gap: 6px; margin-left: 8px; }
+.song-actions button {
+  background: transparent; color: var(--text-dim);
+  border: none; cursor: pointer; font-size: 15px;
+}
+.song-actions button:hover { color: var(--accent); }
+
+.empty-state {
+  text-align: center;
+  color: var(--text-dim);
+  padding: 60px 20px;
+  font-size: 15px;
+}
+
+/* ===== Кнопка сохранения (FAB) ===== */
+.btn-fab {
+  position: fixed;
+  right: 20px; bottom: 20px;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px var(--shadow);
+  z-index: 20;
+  transition: transform .15s;
+}
+.btn-fab:hover { transform: scale(1.08); }
+
+/* ===== Модалки ===== */
+.modal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.65);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+  padding: 14px;
+}
+.modal-content {
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 30px var(--shadow);
+}
+.modal-content.modal-wide { max-width: 720px; }
+.modal-content h2 { margin-top: 0; }
+
+.field { display: block; margin-bottom: 12px; }
+.field span { display: block; font-size: 13px; color: var(--text-dim); margin-bottom: 4px; }
+.field input, .field select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.slider-group { margin: 14px 0; }
+.slider-row { display: block; margin-bottom: 12px; }
+.slider-row span { font-size: 14px; }
+.slider-row input[type="range"] { width: 100%; margin-top: 4px; accent-color: var(--accent); }
+
+.checkbox-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 14px; cursor: pointer; }
+.checkbox-row input { accent-color: var(--accent); }
+
+.tags-group { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; margin: 10px 0; }
+
+.disabled-slider { opacity: .4; pointer-events: none; }
+
+.modal-actions {
+  display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px;
+}
+.btn-primary, .btn-secondary {
+  padding: 10px 18px; border-radius: 10px; border: none; font-size: 14px; cursor: pointer;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-2); }
+.btn-secondary { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--border); }
+
+/* ===== Друзья ===== */
+.friend-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.friend-card {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex; justify-content: space-between; align-items: center; gap: 10px;
+}
+.friend-name { font-weight: 600; }
+.friend-actions { display: flex; gap: 6px; }
+.friend-actions button {
+  background: var(--accent); color: #fff; border: none;
+  padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer;
+}
+.friend-actions button.secondary { background: var(--panel); color: var(--text); border: 1px solid var(--border); }
+
+.friend-add { display: flex; gap: 8px; margin-top: 10px; }
+.friend-add input { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--panel-2); color: var(--text); }
+
+/* ===== Мэтчи ===== */
+.matches-result { margin-top: 14px; }
+.match-section { margin-bottom: 18px; }
+.match-section h3 { font-size: 14px; color: var(--accent-2); margin-bottom: 8px; }
+
+/* Карточка сравнения — двухстрочная, с тегами */
+.match-card {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 10px var(--shadow);
+}
+.match-card.perfect {
+  border-color: var(--gold);
+  box-shadow: 0 0 18px var(--gold);
+}
+
+.match-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.match-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  overflow-wrap: anywhere;
+}
+.match-card-artist {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+.match-card-scores {
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.match-card-scores b { color: var(--text); }
+.match-card-scores .score-friend { color: var(--accent-2); }
+.match-card-scores .score-mine   { color: var(--text); }
+.match-card.perfect .match-card-scores b { color: var(--gold); }
+
+.match-badge {
+  display: inline-block;
+  background: var(--gold);
+  color:#111;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+/* Полоска с тегами — между названием и баллами, две строки */
+.match-tags {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.match-tags .tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.match-tags .tags-label {
+  color: var(--text-dim);
+  min-width: 46px;
+}
+.match-tags .tag-chip {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+}
+.match-tags .tag-chip.empty {
+  opacity: .45;
+  font-style: italic;
+}
+
+/* Секция "совпадения по артистам" */
+.match-artist-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+.match-artist-row b { color: var(--accent-2); }
+
+/* ===== Выбор темы ===== */
+.theme-picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; margin-top: 10px; }
+.theme-swatch {
+  height: 60px; border-radius: 12px; cursor: pointer; border: 2px solid transparent;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: #fff; text-shadow: 0 1px 3px #000;
+  transition: transform .15s;
+}
+.theme-swatch:hover { transform: scale(1.05); }
+.theme-swatch.active { border-color: #fff; }
+
+/* ===== Адаптив ===== */
+@media (max-width: 600px) {
+  .topbar h1 { font-size: 15px; }
+  .btn-icon { padding: 7px 9px; font-size: 14px; }
+  .song-title { font-size: 15px; }
+  .song-score { font-size: 16px; }
+  .tags-group { grid-template-columns: 1fr; }
+  .btn-fab { width: 54px; height: 54px; font-size: 22px; right: 14px; bottom: 14px; }
+
+  .match-card-header { flex-direction: column; }
+  .match-card-scores { text-align: left; }
+  .match-tags .tags-label { min-width: 40px; }
+}
